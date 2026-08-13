@@ -1,22 +1,74 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider = "prisma-client-js"
-}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// TODO: Define your data models here
-// Example:
-// model User {
-//   id        Int      @id @default(autoincrement())
-//   email     String   @unique
-//   username  String   @unique
-//   password  String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Utilisateurs
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  username      String         @unique
+  password      String         // Hashé avec bcryptjs
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  posts         Post[]
+  comments      Comment[]
+  subscriptions Subscription[]
+}
+
+// 2. Thèmes de programmation (JS, TS, Python, etc.)
+model Topic {
+  id          String         @id @default(uuid())
+  title       String         @unique
+  description String?
+  createdAt   DateTime       @default(now())
+
+  posts       Post[]
+  subscribers Subscription[]
+}
+
+// 3. Table de jointure Abonnements Utilisateur <-> Thèmes
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String
+  topicId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicId]) // Empêche le double abonnement à un même thème
+}
+
+// 4. Articles
+model Post {
+  id        String    @id @default(uuid())
+  title     String
+  content   String    @db.Text
+  authorId  String
+  topicId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  comments Comment[]
+}
+
+// 5. Commentaires (Non récursifs)
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  postId    String
+  authorId  String
+  createdAt DateTime  @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}

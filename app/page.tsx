@@ -1,36 +1,36 @@
-import Link from "next/link";
+import Link from 'next/link'
+import Image from 'next/image'
+import logo from "@/public/logo_p6 1.svg"
 
-export const Home = () => {
+export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-      <div className="text-center space-y-8">
-        <div className="flex justify-center">
-          <div className="bg-primary text-primary-foreground text-4xl font-bold px-8 py-4 rounded-2xl">
-            MDD
-          </div>
-        </div>
+    <main className="w-full max-w-[835px] min-h-[400px] md:h-[584px] bg-[#FFFFFF] text-slate-900 flex flex-col justify-center items-center p-4 sm:p-6 text-center mt-6 sm:mt-16 mx-auto px-4">
+      <div className="w-full max-w-2xl space-y-6 flex flex-col items-center">
+        <Image
+          src={logo}
+          alt="Logo MDD"
+          width={835}
+          height={584}
+          priority
+          className="w-full h-auto max-w-[500px] md:max-w-[835px] object-contain"
+        />
 
-        <h1 className="text-3xl font-bold text-foreground">
-          Monde de Dév
-        </h1>
-
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row justify-around items-center gap-4 sm:gap-0 w-full max-w-[377px] mx-auto">
           <Link
             href="/login"
-            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            className="w-[45%] sm:w-[45%] py-3.5 text-black font-semibold rounded-xl border border-[#000000] text-center"
           >
             Se connecter
           </Link>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="w-[45%] sm:w-[45%] py-3.5 text-black font-semibold rounded-xl border border-[#000000] text-center"
           >
-            S&apos;inscrire
+            S'inscrire
           </Link>
         </div>
       </div>
-    </div>
-  );
-};
+    </main>
+  )
+}
 
-export default Home;

@@ -3,7 +3,10 @@ import Image from 'next/image'
 import logo from '@/public/logo_p6 1.svg'
 
 /**
- * Barre de navigation supérieure affichée sur écran large
+
+ * Barre de navigation supérieure affichée sur écran large (sm:flex),
+ * masquée sur mobile (hidden) conformément à la maquette mobile Figma.
+ * Emplacement conforme à l'architecture : components/layout/navigation.tsx
  */
 
 export default function Navigation() {

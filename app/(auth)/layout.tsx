@@ -1,9 +1,10 @@
 import React from 'react'
-import Navigation from '@/components/forms/navigation/navigation'
+import Navigation from '@/components/layout/navigation'
 
 /**
- *Route Group (auth) Layout :
- *s'applique automatiquement sur les routes `/login` et `/register`.
+ * Route Group (auth) Layout :
+ * S'applique automatiquement sur les routes `/login` et `/register`.
+ * Emplacement conforme à l'architecture : components/layout/navigation
  */
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

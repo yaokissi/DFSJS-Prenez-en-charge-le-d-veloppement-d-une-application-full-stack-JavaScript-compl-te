@@ -92,3 +92,82 @@ export async function createPostAction(data: CreatePostInput): Promise<PostActio
     }
   }
 }
+/**
+ * Interface d'un article affiché dans le fil d'actualités avec son auteur et son thème.
+ */
+export interface FeedPost {
+  id: string
+  title: string
+  content: string
+  createdAt: Date
+  author: {
+    username: string
+  }
+  topic: {
+    title: string
+  }
+}
+
+/**
+ * Récupère le fil d'actualités personnalisé de l'utilisateur actuellement connecté.
+ * Filtre les articles pour n'afficher QUE ceux des thèmes auxquels l'utilisateur est abonné.
+ * 
+ * @param sortOrder - Ordre de tri chronologique : 'desc' (du plus récent au plus ancien) ou 'asc'
+ * @returns La liste des articles filtrés et typés `FeedPost[]`
+ * 
+ * @example
+ * ```ts
+ * const posts = await getFeedPostsAction('desc')
+ * ```
+ */
+export async function getFeedPostsAction(
+  sortOrder: 'asc' | 'desc' = 'desc'
+): Promise<FeedPost[]> {
+  try {
+    const session = await getCurrentSession()
+    if (!session) return []
+
+    // 1. Récupération des IDs des thèmes suivis par l'utilisateur connecté
+    const userSubscriptions = await prisma.subscription.findMany({
+      where: { userId: session.userId },
+      select: { topicId: true },
+    })
+
+    const subscribedTopicIds = userSubscriptions.map((sub) => sub.topicId)
+
+    // S'il n'est abonné à aucun thème, le fil d'actualités retourne un tableau vide
+    if (subscribedTopicIds.length === 0) {
+      return []
+    }
+
+    // 2. Récupération des articles appartenant uniquement aux thèmes suivis
+    const posts = await prisma.post.findMany({
+      where: {
+        topicId: {
+          in: subscribedTopicIds,
+        },
+      },
+      orderBy: {
+        createdAt: sortOrder,
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        createdAt: true,
+        author: {
+          select: { username: true },
+        },
+        topic: {
+          select: { title: true },
+        },
+      },
+    })
+
+    return posts
+  } catch (error) {
+    console.error('[GET_FEED_POSTS_ACTION_ERROR]', error)
+    return []
+  }
+}
+

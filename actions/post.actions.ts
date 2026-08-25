@@ -171,3 +171,71 @@ export async function getFeedPostsAction(
   }
 }
 
+/**
+ * Interface détaillée d'un article avec son auteur, son thème et ses commentaires.
+ */
+export interface PostDetails {
+  id: string
+  title: string
+  content: string
+  createdAt: Date
+  author: {
+    username: string
+  }
+  topic: {
+    title: string
+  }
+  comments: {
+    id: string
+    content: string
+    createdAt: Date
+    author: {
+      username: string
+    }
+  }[]
+}
+
+/**
+ * Récupère les détails complets d'un article et la liste de ses commentaires.
+ * 
+ * @param postId - L'identifiant unique (UUID) de l'article
+ * @returns L'article avec ses commentaires ou `null` si introuvable
+ */
+export async function getPostDetailsAction(postId: string): Promise<PostDetails | null> {
+  try {
+    const session = await getCurrentSession()
+    if (!session) return null
+
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        createdAt: true,
+        author: {
+          select: { username: true },
+        },
+        topic: {
+          select: { title: true },
+        },
+        comments: {
+          orderBy: { createdAt: 'asc' },
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            author: {
+              select: { username: true },
+            },
+          },
+        },
+      },
+    })
+
+    return post
+  } catch (error) {
+    console.error('[GET_POST_DETAILS_ACTION_ERROR]', error)
+    return null
+  }
+}

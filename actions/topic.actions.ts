@@ -43,16 +43,18 @@ export async function getTopicsAction(): Promise<TopicWithSubscription[]> {
 
     if (!session) return topics.map((topic) => ({ ...topic, isSubscribed: false }))
 
+    // Récupération des abonnements de l'utilisateur
     const userSubscriptions = await prisma.subscription.findMany({
       where: { userId: session.userId },
       select: { topicId: true },
     })
 
-    const subscribedTopicIds = new Set(userSubscriptions.map((sub) => sub.topicId))
+    // Tableau d'IDs de thèmes abonnés pour l'utilisateur connecté
+    const subscribedTopicIds = userSubscriptions.map((sub) => sub.topicId)
 
     return topics.map((topic) => ({
       ...topic,
-      isSubscribed: subscribedTopicIds.has(topic.id),
+      isSubscribed: subscribedTopicIds.includes(topic.id),
     }))
   } catch (error) {
     console.error('[GET_TOPICS_ACTION_ERROR]', error)

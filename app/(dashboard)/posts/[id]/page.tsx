@@ -1,11 +1,9 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
 import { getCurrentSession } from '@/lib/auth'
 import { getPostDetailsAction } from '@/actions/post.actions'
 import CommentSection from '@/components/features/posts/comment-section'
-import backArrow from '@/public/BackArrow.svg'
+import BackButton from '@/components/layout/back-button'
 
 export async function generateMetadata({
   params,
@@ -59,27 +57,15 @@ export default async function PostDetailPage({
 
   return (
     <div className="max-w-4xl mx-auto py-4 px-4 sm:px-6 text-black space-y-6">
-      {/* 1. Flèche Retour alignée tout à gauche */}
+      {/* 1. Flèche Retour alignée tout à gauche qui retourne à la page précédente de l'historique */}
       <div className="w-full flex justify-start mb-2">
-        <Link
-          href="/feed"
-          title="Retour au fil d'actualités"
-          className="hover:opacity-75 transition cursor-pointer"
-        >
-          <Image
-            src={backArrow}
-            alt="Flèche retour"
-            width={40}
-            height={40}
-            className="w-8 h-8 sm:w-10 sm:h-10"
-          />
-        </Link>
-      {/* 2. Titre de l'article sélectionné */}
-      <h1 className="text-2xl ml-10 sm:text-3xl font-bold text-black leading-tight">
-        {post.title}
-      </h1>
+        <BackButton />
       </div>
 
+      {/* 2. Titre de l'article sélectionné */}
+      <h1 className="text-2xl sm:text-3xl font-bold text-black leading-tight">
+        {post.title}
+      </h1>
 
       {/* 3. Ligne d'informations : Date, Auteur, Thème (Conforme Figma) */}
       <div className="flex flex-wrap items-center gap-6 sm:gap-12 text-sm text-black font-normal">

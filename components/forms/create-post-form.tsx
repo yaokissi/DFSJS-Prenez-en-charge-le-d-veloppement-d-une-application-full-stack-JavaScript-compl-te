@@ -4,7 +4,6 @@ import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
 import { CreatePostSchema, CreatePostInput } from '@/lib/validators/post.validator'
 import { createPostAction } from '@/actions/post.actions'
@@ -87,11 +86,11 @@ export default function CreatePostForm({ topics }: CreatePostFormProps) {
 
   return (
     <div className="w-full max-w-3xl mx-auto text-black relative pt-2 pb-8 px-4 flex flex-col items-center">
-      {/* 1. Flèche retour positionnée au haut-gauche de la page (Conforme Figma Desktop & Mobile) */}
+      {/* 1. Flèche retour directe : exécute router.back() au clic */}
       <div className="w-full flex justify-start mb-4 sm:mb-6">
-        <Link
-          href="/feed"
-          title="Retour au fil d'actualité"
+        <button
+          type="button"
+          onClick={() => router.back()}
           className="hover:opacity-75 transition cursor-pointer"
         >
           <Image
@@ -101,7 +100,7 @@ export default function CreatePostForm({ topics }: CreatePostFormProps) {
             height={40}
             className="w-8 h-8 sm:w-10 sm:h-10"
           />
-        </Link>
+        </button>
       </div>
 
       {/* 2. Titre Créer un nouvel article */}

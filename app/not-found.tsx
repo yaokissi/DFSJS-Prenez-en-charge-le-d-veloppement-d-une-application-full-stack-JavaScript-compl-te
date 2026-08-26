@@ -9,7 +9,7 @@ export const NotFound = () => {
           Page introuvable
         </h1>
         <p className="text-muted-foreground max-w-md">
-          La page que vous recherchez n&apos;existe pas ou a été déplacée.
+          La page que vous recherchez n&apos;existe pas ou a été supprimée.
         </p>
         <Link
           href="/"

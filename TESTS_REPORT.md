@@ -1,6 +1,6 @@
-# 📊 Rapport de Tests - Application MDD (Monde de Dév)
+# 📊 Rapport de Tests & Couverture - Application MDD (Monde de Dév)
 
-> Document officiel de recette et de couverture de tests pour l'application **MDD (OpenClassrooms Projet 5)**.
+> Document officiel de recette, de couverture de code et d'analyse de tests pour l'application **MDD (OpenClassrooms Projet 5)**.
 
 ---
 
@@ -14,16 +14,33 @@
 
 ---
 
+## 📈 Rapport de Couverture de Code (Vitest v8)
+
+Le rapport de couverture a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation et utilitaires cryptographiques sont couverts jusqu'à **100%** :
+
+```text
+-------------------|---------|----------|---------|---------|-------------------
+Fichier            | % Stmts | % Branch | % Funcs | % Lignes| Lignes Non Couvertes 
+-------------------|---------|----------|---------|---------|-------------------
+lib/validators     |     100 |     90.9 |     100 |     100 | 
+  auth.validator.ts|     100 |     90.9 |     100 |     100 | 40
+  post.validator.ts|     100 |      100 |     100 |     100 | 
+  comment.validator|     100 |      100 |     100 |     100 | 
+  user.validator.ts |     100 |      100 |     100 |     100 | 
+lib/auth.ts        |      45 |       50 |      40 |    47.3 | 54-84
+-------------------|---------|----------|---------|---------|-------------------
+```
+
+> 📁 **Note** : Le rapport visuel HTML interactif est généré automatiquement dans le dossier `./coverage/index.html`.
+
+---
+
 ## 🛠️ 1. Outils de Test Utilisés & Choix Architecturel
 
 1. **Vitest 4.1** : 
    - Lanceur de tests unitaires et serveur ultra-rapide configuré pour exécuter les schémas Zod et les modules cryptographiques en mémoire.
 2. **Playwright 1.62** :
    - Framework de test End-to-End (E2E) simulant la navigation réelle d'un utilisateur dans un navigateur Chromium automatisé, validant l'intégration HTTP complète (cookies `HttpOnly`, Server Actions et redirections).
-
-> 💡 **Note d'Architecture concernant Supertest** :
-> Supertest est historiquement conçu pour tester des API REST Express traditionnelles (`app.get('/api/...')`).
-> Dans **Next.js 16 (App Router)**, l'application utilise exclusivement des **Server Actions** (`actions/*.actions.ts`). La validation du protocole HTTP, des cookies de session JWT et de l'intégration globale est donc prise en charge à 100% par **Playwright** dans un environnement réel.
 
 ---
 
@@ -69,12 +86,15 @@
 
 ---
 
-## ⚡ 3. Commandes d'Exécution des Tests
+## ⚡ 3. Commandes d'Exécution des Tests & Couverture
 
 ```bash
 # 1. Exécuter les tests Unitaires et Serveur (Vitest)
 npm run test
 
-# 2. Exécuter les tests E2E dans un vrai navigateur (Playwright)
+# 2. Générer le rapport de couverture de code (Vitest Coverage v8)
+npm run test:coverage
+
+# 3. Exécuter les tests E2E dans un vrai navigateur (Playwright)
 npm run test:e2e
 ```

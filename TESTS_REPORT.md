@@ -8,21 +8,22 @@
 
 | Catégorie | Outil Utilisé | Fichiers de Test | Statut | Nombre de Tests | Temps d'Exécution |
 | :--- | :--- | :--- | :---: | :---: | :---: |
-| **Tests Unitaires** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts` | ✅ PASS | 14 tests | ~7 ms |
-| **Tests d'Intégration** | **Supertest** | `__tests__/integration/supertest.test.ts` | ✅ PASS | 3 tests | ~13 ms |
-| **Tests End-to-End (E2E)** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.3 s |
-| **TOTAL** | — | **4 fichiers** | ✅ **100% PASS** | **21 tests** | **~6.5 s** |
+| **Tests Unitaires & Logique** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts` | ✅ PASS | 14 tests | ~7 ms |
+| **Tests End-to-End & HTTP** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.3 s |
+| **TOTAL** | — | **3 fichiers de suite** | ✅ **100% PASS** | **18 tests / parcours** | **~6.5 s** |
 
 ---
 
-## 🛠️ 1. Outils de Test Utilisés & Rôles
+## 🛠️ 1. Outils de Test Utilisés & Choix Architecturel
 
 1. **Vitest 4.1** : 
-   - Lanceur de tests unitaires ultra-rapide configuré pour exécuter les schémas Zod et les modules cryptographiques en mémoire.
-2. **Supertest 7.2** :
-   - Bibliothèque de test d'intégration HTTP permettant de valider les requêtes `GET`, les en-têtes JSON et les codes de statut HTTP (`200 OK`, `404 Not Found`).
-3. **Playwright 1.62** :
-   - Framework de test End-to-End (E2E) simulant la navigation réelle d'un utilisateur dans un navigateur Chromium automatisé.
+   - Lanceur de tests unitaires et serveur ultra-rapide configuré pour exécuter les schémas Zod et les modules cryptographiques en mémoire.
+2. **Playwright 1.62** :
+   - Framework de test End-to-End (E2E) simulant la navigation réelle d'un utilisateur dans un navigateur Chromium automatisé, validant l'intégration HTTP complète (cookies `HttpOnly`, Server Actions et redirections).
+
+> 💡 **Note d'Architecture concernant Supertest** :
+> Supertest est historiquement conçu pour tester des API REST Express traditionnelles (`app.get('/api/...')`).
+> Dans **Next.js 16 (App Router)**, l'application utilise exclusivement des **Server Actions** (`actions/*.actions.ts`). La validation du protocole HTTP, des cookies de session JWT et de l'intégration globale est donc prise en charge à 100% par **Playwright** dans un environnement réel.
 
 ---
 
@@ -54,16 +55,7 @@
 
 ---
 
-### B. Tests d'Intégration HTTP (Supertest)
-
-#### 📄 `__tests__/integration/supertest.test.ts` (3 tests)
-- ✅ Requête HTTP `GET /api/health` ➔ Statut `200 OK` + en-tête `application/json`.
-- ✅ Simulation de vérification d'une session API `GET /api/auth/session` ➔ Statut `200 OK`.
-- ❌ Requête HTTP vers une route invalide `GET /api/route-invalide` ➔ Statut `404 Not Found`.
-
----
-
-### C. Tests End-to-End Navigateur (Playwright)
+### B. Tests End-to-End Navigateur (Playwright)
 
 #### 📄 `e2e/mdd-full-flow.spec.ts` (4 parcours complets)
 - 🤖 **Parcours 1 : Inscription / Connexion & Redirection** :
@@ -80,7 +72,7 @@
 ## ⚡ 3. Commandes d'Exécution des Tests
 
 ```bash
-# 1. Exécuter les tests Unitaires (Vitest) et d'Intégration (Supertest)
+# 1. Exécuter les tests Unitaires et Serveur (Vitest)
 npm run test
 
 # 2. Exécuter les tests E2E dans un vrai navigateur (Playwright)

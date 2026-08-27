@@ -63,10 +63,10 @@ Toutes les Server Actions sont regroupées dans le dossier `actions/` et appliqu
 
 ## 🧪 Tests Automatisés
 
-Le projet intègre une suite de tests complète conforme aux exigences OpenClassrooms (**Vitest**, **Supertest**, **Playwright**) :
+Le projet intègre une suite de tests automatisés (**Vitest** et **Playwright**) :
 
 ```bash
-# Exécuter les 17 tests Unitaires et d'Intégration Serveur / Supertest (Vitest)
+# Exécuter les 14 tests Unitaires et d'Intégration Serveur (Vitest)
 npm run test
 
 # Exécuter les 4 tests End-to-End en navigateur Chrome automatisé (Playwright)

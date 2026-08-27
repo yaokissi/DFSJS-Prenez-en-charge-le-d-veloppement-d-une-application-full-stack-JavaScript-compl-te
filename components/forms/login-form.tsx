@@ -63,10 +63,8 @@ export default function LoginForm() {
 
       // Cas de succès : Affichage du message puis redirection vers le fil d'actualité (/feed)
       setServerSuccess('Connexion réussie ! Redirection...')
-      setTimeout(() => {
-        router.push('/feed')
-        router.refresh() // Rafraîchit le cache serveur pour charger la session active
-      }, 800)
+      router.push('/feed')
+      router.refresh()
     })
   }
 

@@ -55,23 +55,24 @@ async function main() {
 
   console.log(`✅ ${createdTopics.length} thèmes diversifiés insérés avec succès !`)
 
-  // Création/Vérification de l'utilisateur de démonstration (AlexDev)
+  // Hachage sécurisé du mot de passe de démo
   const hashedPassword = await bcrypt.hash('Password123!', 10)
-  
-  let user = await prisma.user.findUnique({
+
+  // Création / Mises à jour du mot de passe de démo pour AlexDev
+  const user = await prisma.user.upsert({
     where: { email: 'alex@mdd.fr' },
+    update: {
+      username: 'AlexDev',
+      password: hashedPassword,
+    },
+    create: {
+      email: 'alex@mdd.fr',
+      username: 'AlexDev',
+      password: hashedPassword,
+    },
   })
 
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        email: 'alex@mdd.fr',
-        username: 'AlexDev',
-        password: hashedPassword,
-      },
-    })
-    console.log('👤 Utilisateur de démo AlexDev créé !')
-  }
+  console.log('👤 Utilisateur de démo AlexDev mis à jour avec le mot de passe Password123!')
 
   // S'assurer que l'utilisateur est abonné aux 3 premiers thèmes pour la démo
   for (let i = 0; i < 3; i++) {

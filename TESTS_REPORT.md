@@ -14,9 +14,9 @@
 
 ---
 
-## 📈 Rapport de Couverture de Code (Vitest v8)
+## 📈 1. Rapport de Couverture de Code (Vitest v8)
 
-Le rapport de couverture a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation et utilitaires cryptographiques sont couverts jusqu'à **100%** :
+Le rapport de couverture de code unitaire et serveur a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation et utilitaires cryptographiques sont couverts jusqu'à **100%** :
 
 ```text
 -------------------|---------|----------|---------|---------|-------------------
@@ -31,20 +31,20 @@ lib/auth.ts        |      45 |       50 |      40 |    47.3 | 54-84
 -------------------|---------|----------|---------|---------|-------------------
 ```
 
-> 📁 **Note** : Le rapport visuel HTML interactif est généré automatiquement dans le dossier `./coverage/index.html`.
+> 📁 **Rapport HTML Interactif Vitest** : Généré automatiquement dans `./coverage/index.html`.
 
 ---
 
-## 🛠️ 1. Outils de Test Utilisés & Choix Architecturel
+## 🤖 2. Rapport Visuel d'Exécution E2E (Playwright HTML Report)
 
-1. **Vitest 4.1** : 
-   - Lanceur de tests unitaires et serveur ultra-rapide configuré pour exécuter les schémas Zod et les modules cryptographiques en mémoire.
-2. **Playwright 1.62** :
-   - Framework de test End-to-End (E2E) simulant la navigation réelle d'un utilisateur dans un navigateur Chromium automatisé, validant l'intégration HTTP complète (cookies `HttpOnly`, Server Actions et redirections).
+Playwright génère son propre rapport HTML interactif d'exécution E2E. Ce rapport présente les captures d'écran, les étapes et les temps d'exécution de chaque parcours utilisateur Chrome.
+
+- **Dossier du rapport** : `./playwright-report/index.html`
+- **Commande d'ouverture** : `npm run test:e2e:report`
 
 ---
 
-## 🔍 2. Détail des Fichiers et Cas de Test
+## 🔍 3. Détail des Fichiers et Cas de Test
 
 ### A. Tests Unitaires (Vitest)
 
@@ -86,15 +86,18 @@ lib/auth.ts        |      45 |       50 |      40 |    47.3 | 54-84
 
 ---
 
-## ⚡ 3. Commandes d'Exécution des Tests & Couverture
+## ⚡ 4. Commandes d'Exécution des Tests & Rapports
 
 ```bash
 # 1. Exécuter les tests Unitaires et Serveur (Vitest)
 npm run test
 
-# 2. Générer le rapport de couverture de code (Vitest Coverage v8)
+# 2. Générer le rapport de couverture de code Vitest (dossier ./coverage)
 npm run test:coverage
 
 # 3. Exécuter les tests E2E dans un vrai navigateur (Playwright)
 npm run test:e2e
+
+# 4. Ouvrir le rapport visuel HTML d'exécution Playwright (dossier ./playwright-report)
+npm run test:e2e:report
 ```

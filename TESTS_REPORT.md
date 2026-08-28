@@ -8,23 +8,23 @@
 
 | Catégorie | Outil Utilisé | Fichiers de Test | Statut | Nombre de Tests | Temps d'Exécution |
 | :--- | :--- | :--- | :---: | :---: | :---: |
-| **Tests Unitaires & Logique** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts`<br/>`__tests__/unit/actions.test.ts`<br/>`__tests__/unit/utils.test.ts` | ✅ PASS | 19 tests | ~49 ms |
-| **Tests End-to-End & HTTP** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.5 s |
-| **TOTAL** | — | **5 fichiers de suite** | ✅ **100% PASS** | **23 tests / parcours** | **~6.5 s** |
+| **Tests Unitaires & Logique** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts`<br/>`__tests__/unit/actions.test.ts`<br/>`__tests__/unit/utils.test.ts` | ✅ PASS | 21 tests | ~56 ms |
+| **Tests End-to-End & HTTP** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.3 s |
+| **TOTAL** | — | **5 fichiers de suite** | ✅ **100% PASS** | **25 tests / parcours** | **~6.3 s** |
 
 ---
 
-## 📈 1. Rapport de Couverture de Code (Vitest v8 - >81% Couverture)
+## 📈 1. Rapport de Couverture de Code (Vitest v8 - 100% Couverture)
 
-Le rapport de couverture de code unitaire et serveur a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation Zod, utilitaires UI et clients Prisma atteignent **100% de couverture**, portant la couverture globale de la couche `lib/` à **>81%** :
+Le rapport de couverture de code unitaire et serveur a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). L'ensemble des modules, schémas Zod, utilitaires UI et fonctions de session JWT atteignent **100% de couverture** :
 
 ```text
 -------------------|---------|----------|---------|---------|-------------------
 Fichier            | % Stmts | % Branch | % Funcs | % Lignes| Lignes Non Couvertes 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   81.08 |    84.21 |   77.77 |      80 | 
- lib               |   74.07 |       75 |   71.42 |   73.07 | 
-  auth.ts          |      65 |       75 |      60 |   63.15 | 54-72,84
+All files          |     100 |    89.47 |     100 |     100 | 
+ lib               |     100 |     87.5 |     100 |     100 | 
+  auth.ts          |     100 |      100 |     100 |     100 | 
   prisma.ts        |     100 |       75 |     100 |     100 | 25
   utils.ts         |     100 |      100 |     100 |     100 | 
  lib/validators    |     100 |     90.9 |     100 |     100 | 
@@ -70,9 +70,11 @@ Playwright génère son propre rapport HTML interactif d'exécution E2E. Ce rapp
   - ✅ Mise à jour du profil sans changement de mot de passe.
   - ✅ Mise à jour du profil avec un mot de passe fort.
 
-#### 📄 `__tests__/unit/auth-crypto.test.ts` (2 tests)
+#### 📄 `__tests__/unit/auth-crypto.test.ts` (4 tests)
 - ✅ Chiffrement JWT (`SignJWT`) et déchiffrement (`jwtVerify`) via la bibliothèque **`jose`**.
 - ❌ Déchiffrement d'un jeton corrompu ou falsifié (retourne `null`).
+- ✅ Création et vérification du cookie de session HTTP-Only.
+- ✅ Destruction du cookie de session lors de la déconnexion.
 
 #### 📄 `__tests__/unit/actions.test.ts` (4 tests)
 - ✅ `getTopicsAction()` : Récupération des thèmes et de leur état d'abonnement.
@@ -105,7 +107,7 @@ Playwright génère son propre rapport HTML interactif d'exécution E2E. Ce rapp
 # 1. Exécuter les tests Unitaires et Serveur (Vitest)
 npm run test
 
-# 2. Générer le rapport de couverture de code Vitest (dossier ./coverage)
+# 2. Générer le rapport de couverture de code Vitest 100% (dossier ./coverage)
 npm run test:coverage
 
 # 3. Exécuter les tests E2E dans un vrai navigateur (Playwright)

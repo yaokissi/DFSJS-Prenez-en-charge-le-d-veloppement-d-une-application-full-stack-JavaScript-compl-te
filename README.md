@@ -4,13 +4,13 @@
 
 ---
 
-## 📌 Présentation du Projet
+## Présentation du Projet
 
 **MDD (Monde de Dév)** est une application web conçue pour l'entreprise **ORION**. Elle permet aux développeurs de s'abonner à des thèmes de programmation spécifiques, de publier des articles, de consulter un fil d'actualités personnalisé et d'échanger avec la communauté à travers des commentaires.
 
 ---
 
-## ⚡ Fonctionnalités Clés
+## Fonctionnalités Clés
 
 ### 1. Authentification & Sécurité (`/login` & `/register`)
 - **Inscription & Connexion** avec validation en temps réel via **React Hook Form** et **Zod**.
@@ -22,10 +22,11 @@
 - Catalogue interactif présentant divers thèmes de développement (JavaScript, TypeScript, React, Python, DevOps, etc.).
 - **Abonnement / Désabonnement en 1 clic** avec réactivité instantanée via `useTransition` React 19 et Server Actions.
 
+
 ### 3. Création & Publication d'Articles (`/posts/create`)
 - Formulaire conforme au design Figma (flèche retour, sélection du thème, titre et contenu texte).
-- **Sécurité** : Validation Zod côté client et ré-exécution de la validation sur le serveur.
-- Invalidation dynamique du cache Next.js via `revalidatePath('/feed')` lors de la publication.
+- **Sécurité** : Validation Zod côté client et ré-exécution de la validation sur le serveur. 
+- Rafraichir les données en cache Next.js via `revalidatePath('/feed')` lors de la publication.
 
 ### 4. Fil d'Actualités Personnalisé & Tri (`/feed`)
 - **Filtrage Métier** : Seuls les articles appartenant aux thèmes auxquels l'utilisateur connecté est abonné s'affichent (`WHERE topicId IN (...)`).
@@ -42,58 +43,56 @@
 - Mise à jour en direct du cookie de session lors du changement d'identifiants.
 - Gestion directe des abonnements avec suppression instantanée depuis la page profil.
 
----
+### 7. UI / UX Responsive & Maquettes Figma
+- Navigation desktop avec logo MDD, liens actifs et profil utilisateur.
+- Navigation mobile avec **menu Hamburger SVG** 
 
-## 🛠️ Documentation des Server Actions
 
-Toutes les Server Actions sont regroupées dans le dossier `actions/` et appliquent une validation stricte par schémas Zod :
+## Stack Technique
 
-- `registerUserAction(data)` (`actions/auth.actions.ts`) : Valide les identifiants, hache le mot de passe via `bcryptjs`, crée l'utilisateur en BDD et génère la session HTTP-Only.
-- `loginUserAction(data)` (`actions/auth.actions.ts`) : Authentifie un utilisateur par email ou pseudo, contrôle le mot de passe et initialise le cookie JWT `jose`.
-- `logoutUserAction()` (`actions/auth.actions.ts`) : Réinitialise et supprime le cookie de session HTTP-Only.
-- `getTopicsAction()` (`actions/topic.actions.ts`) : Récupère la liste des thèmes et associe la propriété `isSubscribed: true/false`.
-- `toggleSubscriptionAction(topicId)` (`actions/topic.actions.ts`) : Bascule l'état d'abonnement (ajout/suppression dans PostgreSQL) et invalide le cache Next.js.
-- `getFeedPostsAction(sortOrder)` (`actions/post.actions.ts`) : Charge les articles des thèmes abonnés triés par date asc/desc.
-- `createPostAction(data)` (`actions/post.actions.ts`) : Valide et crée un article puis déclenche `revalidatePath('/feed')`.
-- `getPostDetailsAction(postId)` (`actions/post.actions.ts`) : Charge un article avec son auteur, son thème et ses commentaires triés.
-- `createCommentAction(data)` (`actions/comment.actions.ts`) : Ajoute un commentaire et rafraîchit la page de l'article.
-- `updateProfileAction(data)` (`actions/user.actions.ts`) : Met à jour les infos du profil et régénère immédiatement le cookie JWT.
+- **Framework Web** : [Next.js 16](https://nextjs.org/) (App Router, Server Components, Server Actions)
+- **Langage** : [TypeScript 5](https://www.typescriptlang.org/) (Typage strict 100% avec commentaires TSDoc)
+- **Styling** : [Tailwind CSS 4](https://tailwindcss.com/)
+- **Base de données** : [PostgreSQL 17](https://www.postgresql.org/)
+- **ORM** : [Prisma 6](https://www.prisma.io/)
+- **Authentification & Chiffrement** : `jose` (JWT), `bcryptjs`, Cookies HTTP-Only
+- **Validation de Données** : [Zod 3](https://zod.dev/) & [@hookform/resolvers](https://react-hook-form.com/)
 
----
 
-## 🧪 Tests Automatisés
+## Architecture du Projet
 
-Le projet intègre une suite de tests automatisés (**Vitest** et **Playwright**) :
-
-```bash
-# Exécuter les 14 tests Unitaires et d'Intégration Serveur (Vitest)
-npm run test
-
-# Exécuter les 4 tests End-to-End en navigateur Chrome automatisé (Playwright)
-npm run test:e2e
+```text
+projet5/
+├── actions/                  # Server Actions Next.js (Auth, Topic, Post, Comment, User)
+│   ├── auth.actions.ts
+│   ├── comment.actions.ts
+│   ├── post.actions.ts
+│   ├── topic.actions.ts
+│   └── user.actions.ts
+├── app/                      # Next.js App Router
+│   ├── (auth)/               # Routes publiques (login, register)
+│   ├── (dashboard)/          # Routes protégées (feed, topics, posts/create, posts/[id], profile)
+│   ├── api/auth/             # Endpoints API d'authentification
+│   ├── layout.tsx            # Layout racine
+│   └── page.tsx              # Page d'accueil / Redirection
+├── components/               # Composants React
+│   ├── features/             # Composants métiers (posts, topics)
+│   ├── forms/                # Formulaires clients (login-form, register-form, create-post-form, profile-form)
+│   └── layout/               # Éléments de mise en page (navbar, navigation, back-button, logout-button)
+├── lib/                      # Utilitaires & Schémas
+│   ├── validators/           # Schémas Zod (auth, post, comment, user)
+│   ├── auth.ts               # Cryptographie JWT, cookies HTTP-Only & helpers de session
+│   └── prisma.ts             # Client Prisma Singleton
+├── prisma/                   # Base de données PostgreSQL
+│   ├── schema.prisma         # Modèles de données (User, Topic, Post, Comment, Subscription)
+│   └── seed.ts               # Script d'initialisation des thèmes et données de test
+├── public/                   # Assets statiques & icônes SVG Figma
+└── package.json
 ```
 
-Voir le fichier **[`TESTS_REPORT.md`](file:///Users/yaokissi/Hard_Disc/Open-Classroom/projet5/TESTS_REPORT.md)** pour le rapport détaillé des résultats.
-
 ---
 
-## ❓ FAQ Utilisateur
-
-### Q1. Pourquoi mon fil d'actualités (`/feed`) est-il vide ?
-> **Réponse** : Le fil d'actualités s'adapte à vos préférences ! Il affiche uniquement les articles correspondant aux thèmes auxquels vous êtes abonné. Rendez-vous sur la page **Thèmes** (`/topics`) et cliquez sur *"S'abonner"* à un ou plusieurs thèmes.
-
-### Q2. Puis-je modifier mon nom d'utilisateur ou e-mail sans changer mon mot de passe ?
-> **Réponse** : Oui ! Dans la page **Profil** (`/profile`), modifiez votre nom d'utilisateur ou votre e-mail et laissez le champ mot de passe vide. Cliquez sur *"Sauvegarder"* pour valider.
-
-### Q3. Comment fonctionne le bouton de tri sur le fil d'actualités ?
-> **Réponse** : Le bouton *"Trier par ↓"* permet de basculer instantanément l'affichage des articles du plus récent au plus ancien ou inversement.
-
-### Q4. Que faire si une erreur de connexion à la base de données apparaît lors des tests ?
-> **Réponse** : Assurez-vous que l'instance Docker PostgreSQL est active (`docker ps`) et lancez `npx prisma db push` puis `npx prisma db seed`.
-
----
-
-## 🚀 Démarrage Rapide
+## Démarrage Rapide
 
 ### 1. Prérequis
 - Node.js `20.x` ou supérieur
@@ -102,17 +101,20 @@ Voir le fichier **[`TESTS_REPORT.md`](file:///Users/yaokissi/Hard_Disc/Open-Clas
 
 ### 2. Installation
 ```bash
+# Lancer le projet
 git clone https://github.com/yaokissi/DFSJS-Prenez-en-charge-le-d-veloppement-d-une-application-full-stack-JavaScript-compl-te.git
 cd projet5
-npm install --legacy-peer-deps
+npm install
 ```
 
 ### 3. Base de Données (Docker & PostgreSQL)
+Lancer l'instance PostgreSQL avec Docker :
 ```bash
 docker run --name mdd-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=mdd_db -p 5432:5432 -d postgres:17
 ```
 
-### 4. Configuration d'Environnement (.env)
+### 4. Configuration d'Environnement
+Créer le fichier `.env` à la racine :
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/mdd_db?schema=public"
 AUTH_SECRET="votre-cle-secrete-jwt-super-securisee-32-caracteres"
@@ -121,7 +123,10 @@ AUTH_URL="http://localhost:3000"
 
 ### 5. Migration Prisma & Seeding
 ```bash
+# Appliquer le schéma de BDD
 npx prisma db push
+
+# Exécuter le script de remplissage des thèmes (Seeding)
 npx prisma db seed
 ```
 
@@ -130,3 +135,13 @@ npx prisma db seed
 npm run dev
 ```
 L'application sera accessible sur [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Bonnes Pratiques & Qualité de Code
+
+- **Double sécurité des données entrantes** : Validation des schémas Zod côté client (React Hook Form) et ré-validation systématique dans chaque Server Action.
+- **Documentation TSDoc** : Toutes les fonctions, Server Actions et composants sont documentés avec des commentaires TSDoc standardisés.
+- **Zéro Erreur TypeScript** : Projet strictement typé et validé via `npx tsc --noEmit`.
+
+

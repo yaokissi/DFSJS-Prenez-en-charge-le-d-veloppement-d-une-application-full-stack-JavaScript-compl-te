@@ -3,7 +3,7 @@ import path from 'path'
 
 /**
  * Configuration Vitest pour les tests unitaires et d'intégration
- * Configuré avec le rapporteur de couverture v8 ciblé sur les modules et utilitaires de l'application (lib/).
+ * Configuré avec le rapporteur de couverture v8 sur les modules de l'application (lib/).
  */
 export default defineConfig({
   test: {

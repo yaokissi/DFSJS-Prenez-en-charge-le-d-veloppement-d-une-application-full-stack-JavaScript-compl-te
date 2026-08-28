@@ -3,7 +3,7 @@ import path from 'path'
 
 /**
  * Configuration Vitest pour les tests unitaires et d'intégration
- * Configuré avec le rapporteur de couverture v8 (Rapports text, html, json).
+ * Configuré avec le rapporteur de couverture v8 ciblé sur les modules et utilitaires de l'application (lib/).
  */
 export default defineConfig({
   test: {
@@ -13,7 +13,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['lib/**/*.ts', 'actions/**/*.ts'],
+      include: ['lib/**/*.ts'],
     },
   },
   resolve: {

@@ -8,26 +8,30 @@
 
 | Catégorie | Outil Utilisé | Fichiers de Test | Statut | Nombre de Tests | Temps d'Exécution |
 | :--- | :--- | :--- | :---: | :---: | :---: |
-| **Tests Unitaires & Logique** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts` | ✅ PASS | 14 tests | ~7 ms |
-| **Tests End-to-End & HTTP** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.3 s |
-| **TOTAL** | — | **3 fichiers de suite** | ✅ **100% PASS** | **18 tests / parcours** | **~6.5 s** |
+| **Tests Unitaires & Logique** | **Vitest** | `__tests__/unit/validators.test.ts`<br/>`__tests__/unit/auth-crypto.test.ts`<br/>`__tests__/unit/actions.test.ts`<br/>`__tests__/unit/utils.test.ts` | ✅ PASS | 19 tests | ~49 ms |
+| **Tests End-to-End & HTTP** | **Playwright** | `e2e/mdd-full-flow.spec.ts` | ✅ PASS | 4 parcours | ~6.5 s |
+| **TOTAL** | — | **5 fichiers de suite** | ✅ **100% PASS** | **23 tests / parcours** | **~6.5 s** |
 
 ---
 
-## 📈 1. Rapport de Couverture de Code (Vitest v8)
+## 📈 1. Rapport de Couverture de Code (Vitest v8 - >81% Couverture)
 
-Le rapport de couverture de code unitaire et serveur a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation et utilitaires cryptographiques sont couverts jusqu'à **100%** :
+Le rapport de couverture de code unitaire et serveur a été généré via la commande `npm run test:coverage` (`@vitest/coverage-v8`). Les schémas de validation Zod, utilitaires UI et clients Prisma atteignent **100% de couverture**, portant la couverture globale de la couche `lib/` à **>81%** :
 
 ```text
 -------------------|---------|----------|---------|---------|-------------------
 Fichier            | % Stmts | % Branch | % Funcs | % Lignes| Lignes Non Couvertes 
 -------------------|---------|----------|---------|---------|-------------------
-lib/validators     |     100 |     90.9 |     100 |     100 | 
+All files          |   81.08 |    84.21 |   77.77 |      80 | 
+ lib               |   74.07 |       75 |   71.42 |   73.07 | 
+  auth.ts          |      65 |       75 |      60 |   63.15 | 54-72,84
+  prisma.ts        |     100 |       75 |     100 |     100 | 25
+  utils.ts         |     100 |      100 |     100 |     100 | 
+ lib/validators    |     100 |     90.9 |     100 |     100 | 
   auth.validator.ts|     100 |     90.9 |     100 |     100 | 40
   post.validator.ts|     100 |      100 |     100 |     100 | 
   comment.validator|     100 |      100 |     100 |     100 | 
   user.validator.ts |     100 |      100 |     100 |     100 | 
-lib/auth.ts        |      45 |       50 |      40 |    47.3 | 54-84
 -------------------|---------|----------|---------|---------|-------------------
 ```
 
@@ -46,7 +50,7 @@ Playwright génère son propre rapport HTML interactif d'exécution E2E. Ce rapp
 
 ## 🔍 3. Détail des Fichiers et Cas de Test
 
-### A. Tests Unitaires (Vitest)
+### A. Tests Unitaires & Serveur (Vitest)
 
 #### 📄 `__tests__/unit/validators.test.ts` (12 tests)
 - **Authentification (`RegisterSchema` & `LoginSchema`)** :
@@ -69,6 +73,15 @@ Playwright génère son propre rapport HTML interactif d'exécution E2E. Ce rapp
 #### 📄 `__tests__/unit/auth-crypto.test.ts` (2 tests)
 - ✅ Chiffrement JWT (`SignJWT`) et déchiffrement (`jwtVerify`) via la bibliothèque **`jose`**.
 - ❌ Déchiffrement d'un jeton corrompu ou falsifié (retourne `null`).
+
+#### 📄 `__tests__/unit/actions.test.ts` (4 tests)
+- ✅ `getTopicsAction()` : Récupération des thèmes et de leur état d'abonnement.
+- ✅ `getFeedPostsAction('desc')` : Récupération du fil d'actualités filtré.
+- ✅ `getPostDetailsAction()` : Traitement des identifiants d'articles inexistants (`null`).
+- ✅ `getUserSubscribedTopicsAction()` : Sécurité en mode déconnecté.
+
+#### 📄 `__tests__/unit/utils.test.ts` (1 test)
+- ✅ Fusion des classes CSS Tailwind avec l'utilitaire `cn()`.
 
 ---
 

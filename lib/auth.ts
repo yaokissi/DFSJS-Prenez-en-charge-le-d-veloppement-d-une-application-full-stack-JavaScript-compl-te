@@ -9,7 +9,7 @@ import { cookies } from 'next/headers'
  * 4. `secure: process.env.NODE_ENV === 'production'` garantit l'envoi uniquement via HTTPS en production.
  */
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-mdd-orion-dev-only-key-32chars'
+const JWT_SECRET = process.env.JWT_SECRET 
 const encodedKey = new TextEncoder().encode(JWT_SECRET)
 
 export interface JWTPayload {

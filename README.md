@@ -117,8 +117,7 @@ docker run --name mdd-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=passwo
 Créer le fichier `.env` à la racine :
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/mdd_db?schema=public"
-AUTH_SECRET="votre-cle-secrete-jwt-super-securisee-32-caracteres"
-AUTH_URL="http://localhost:3000"
+JWT_SECRET="votre-cle-secrete-jwt-super-securisee-32-caracteres"
 ```
 
 ### 5. Migration Prisma & Seeding
